@@ -16,7 +16,6 @@ function openDatabase() {
 
         if (!db.objectStoreNames.contains('questions')) {
             var questionsStore = db.createObjectStore('questions', { keyPath: 'id', autoIncrement: true });
-            questionsStore.createIndex('title', 'title', { unique: false });
             questionsStore.createIndex('question', 'question', { unique: false });
             questionsStore.createIndex('theme_id', 'theme_id', { unique: false });
             questionsStore.createIndex('private', 'private', { unique: false });
