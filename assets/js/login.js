@@ -10,8 +10,7 @@ function handleLogin(){
         var user = request.result;
         if (user) {
             if (user.password === password) {
-                console.log('Login bem-sucedido');
-                window.location.href = '../index.html';
+                success('Login bem-sucedido', user);
             } else {
                 console.error('Senha incorreta');
                 document.getElementById('errorSection').textContent = 'Senha incorreta';
@@ -23,8 +22,7 @@ function handleLogin(){
             var addUserRequest = usersStore.add(newUser);
 
             addUserRequest.onsuccess = function() {
-                console.log('Conta criada com sucesso');
-                window.location.href = '../index.html';
+                success('Conta criada com sucesso', newUser);
             };
 
             addUserRequest.onerror = function() {
@@ -37,4 +35,11 @@ function handleLogin(){
     request.onerror = function(event) {
         console.error('Erro ao buscar usuário', event.target.errorCode);
     };    
+}
+
+function success(message, user){
+    console.log(message);
+    window.location.href = '../index.html';
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('currentUser', JSON.stringify(user));
 }
