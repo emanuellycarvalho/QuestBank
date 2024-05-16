@@ -1,12 +1,9 @@
-var db;
-
-openDatabase();
-
 function openDatabase() {
     var request = indexedDB.open('questBank', 1);
 
     request.onupgradeneeded = function(event) {
         var db = event.target.result;
+        window.db = db;
 
         // Verifica se as tabelas já existem
         if (!db.objectStoreNames.contains('themes')) {
@@ -30,6 +27,14 @@ function openDatabase() {
             historyStore.createIndex('accuracy_average', 'accuracy_average', { unique: false });
             historyStore.createIndex('observations', 'observations', { unique: false });
         }
+
+        if (!db.objectStoreNames.contains('users')) {
+            var usersStore = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+            usersStore.createIndex('name', 'name', { unique: false });
+            usersStore.createIndex('email', 'email', { unique: true });
+            usersStore.createIndex('password', 'password', { unique: false });
+            usersStore.createIndex('type', 'type', { unique: false });
+        }
     };
 
     request.onsuccess = async function(event) {
@@ -43,6 +48,10 @@ function openDatabase() {
     
         if (!(await tableHasRows('questions'))) {
             populateQuestions();
+        }
+
+        if (!(await tableHasRows('users'))) {
+            populateUsers();
         }
     
         if (!(await tableHasRows('history'))) {
@@ -89,6 +98,15 @@ function populateQuestions() {
     questionsStore.add({ title: 'Pergunta 1', question: 'Qual a capital do Brasil?', theme_id: 1, private: false });
     questionsStore.add({ title: 'Pergunta 2', question: 'Quanto é 2 + 2?', theme_id: 2, private: true });
     console.log('Tabela de questões povoada.');
+}
+
+function populateUsers() {
+    var transaction = db.transaction(['users'], 'readwrite');
+    var usersStore = transaction.objectStore('users');
+
+    usersStore.add({ name: 'Professor', email: 'professor@example.com', password: '123456', type: 1 }); // type 1 para professor
+    usersStore.add({ name: 'Aluno', email: 'aluno@example.com', password: '123456', type: 2 }); // type 2 para aluno
+    console.log('Tabela de usuários povoada.');
 }
 
 function populateHistory() {
