@@ -15,7 +15,8 @@ function openDatabase() {
             var questionsStore = db.createObjectStore('questions', { keyPath: 'id', autoIncrement: true });
             questionsStore.createIndex('question', 'question', { unique: false });
             questionsStore.createIndex('theme_id', 'theme_id', { unique: false });
-            questionsStore.createIndex('private', 'private', { unique: false });
+            questionsStore.createIndex('user_id', 'user_id', { unique: false });
+            questionsStore.createIndex('isPublic', 'isPublic', { unique: false });
         }
 
         if (!db.objectStoreNames.contains('history')) {
@@ -95,8 +96,8 @@ function populateQuestions() {
     var transaction = db.transaction(['questions'], 'readwrite');
     var questionsStore = transaction.objectStore('questions');
 
-    questionsStore.add({ title: 'Pergunta 1', question: 'Qual a capital do Brasil?', theme_id: 1, private: false });
-    questionsStore.add({ title: 'Pergunta 2', question: 'Quanto é 2 + 2?', theme_id: 2, private: true });
+    questionsStore.add({ question: 'Qual a capital do Brasil?', theme_id: 1, isPublic: false, user_id: 1 });
+    questionsStore.add({ question: 'Quanto é 2 + 2?', theme_id: 2, isPublic: true, user_id: 1 });
     console.log('Tabela de questões povoada.');
 }
 

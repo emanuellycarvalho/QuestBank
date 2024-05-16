@@ -52,6 +52,7 @@
             <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
             <li><a href="pages/questions.html">Questões</a></li>
             <li class="loginBtn"><a class="getstarted scrollto" href="./pages/register-and-login.html">Login</a></li>
+            <li class="teachersOnly"><a href="./pages/new-question.html">Nova Questão</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
@@ -164,16 +165,20 @@
         var isLoggedIn = localStorage.getItem('isLoggedIn');
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
-        var elements = document.getElementsByClassName('loginBtn');
-        console.log(elements);
+        var loggedUserElements = document.getElementsByClassName('loginBtn');
+        var teacherElements = document.getElementsByClassName('teacherOnly');
+
         if (isLoggedIn === 'true' && currentUser) {
             console.log('Usuário logado:', currentUser.name);
-            elements[0].style.display = "none";
-            elements[1].style.display = "none";
+            loggedUserElements[0].style.display = "none";
+            loggedUserElements[1].style.display = "none";
+            if(currentUser.type == 1){
+              // TODO
+            }
         } else {
             console.log('Nenhum usuário logado');
-            elements[0].style.display = "block";
-            elements[1].style.display = "block";
+            loggedUserElements[0].style.display = "block";
+            loggedUserElements[1].style.display = "block";
         }
       });
     </script>
