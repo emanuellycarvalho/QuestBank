@@ -40,7 +40,7 @@ function openDatabase() {
     request.onsuccess = async function(event) {
         db = event.target.result;
 
-        console.log('Banco de dados aberto com sucesso');
+        console.log('Banco de dados aberto e funcionando');
 
         if (!(await tableHasRows('themes'))) {
             populateThemes();

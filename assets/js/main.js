@@ -6,6 +6,13 @@
 * License: https://bootstrapmade.com/license/
 */
 
+var script = document.createElement('script');
+script.src = '../assets/database/database.js';
+document.head.appendChild(script);
+script.onload = function() {
+  openDatabase();
+};
+
 (function() {
   "use strict";
 
