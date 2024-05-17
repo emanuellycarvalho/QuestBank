@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var theme = themeSelect.value.trim();
         var isPublic = isPublicCheckbox.checked;
 
-        if (content === '' || theme === '') {
+        if (content === '' || theme === '' || content === null || theme === null) {
             errorSection.textContent = 'Por favor, preencha todos os campos.';
             successSection.textContent = '';
             return;
@@ -59,8 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var questionsStore = transaction.objectStore('questions');
         var newQuestion = { question: content, isPublic: isPublic, theme_id: theme, user_id: currentUser.id};
         var addQuestionRequest = questionsStore.add(newQuestion);
-
-        console.log(addQuestionRequest);
 
         contentInput.value = '';
         themeSelect.value = '';
