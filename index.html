@@ -51,8 +51,8 @@
         <ul>
             <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
             <li><a href="pages/questions.html">Questões</a></li>
-            <li class="loginBtn"><a class="getstarted scrollto" href="./pages/register-and-login.html">Login</a></li>
-            <li class="teachersOnly"><a href="./pages/new-question.html">Nova Questão</a></li>
+            <li class="loginBtn unloggedUser"><a class="getstarted scrollto" href="./pages/register-and-login.html">Login</a></li>
+            <li class="teachersOnly"><a href="./pages/history.html">Históricos</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
@@ -70,7 +70,7 @@
           <h1 data-aos="fade-up">QuestBank é a solução ideal para professores e alunos</h1>
           <h2 data-aos="fade-up" data-aos-delay="400">
             que desejam criar provas ou estudar de forma eficiente
-          <div data-aos="fade-up" data-aos-delay="600" class="loginBtn">
+          <div data-aos="fade-up" data-aos-delay="600" class="unloggedUser">
             <div class="text-center text-lg-start">
               <a href="./pages/register-and-login.html" class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
                 <span>Login</span>
@@ -160,28 +160,6 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/custom.js"></script>
     <script src="assets/database/database.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        var isLoggedIn = localStorage.getItem('isLoggedIn');
-        var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-        var loggedUserElements = document.getElementsByClassName('loginBtn');
-        var teacherElements = document.getElementsByClassName('teacherOnly');
-
-        if (isLoggedIn === 'true' && currentUser) {
-            console.log('Usuário logado:', currentUser.name);
-            loggedUserElements[0].style.display = "none";
-            loggedUserElements[1].style.display = "none";
-            if(currentUser.type == 1){
-              // TODO
-            }
-        } else {
-            console.log('Nenhum usuário logado');
-            loggedUserElements[0].style.display = "block";
-            loggedUserElements[1].style.display = "block";
-        }
-      });
-    </script>
   </div>
   <!-- End Other -->
 </body>

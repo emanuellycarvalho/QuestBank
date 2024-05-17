@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
             historyStore.openCursor().onsuccess = function(event) {
                 var cursor = event.target.result;
                 if (cursor) {
-                    console.log(cursor.value)
                     var questionId = cursor.value.question_id;
                     var questionRequest = questionsStore.get(questionId);
     
