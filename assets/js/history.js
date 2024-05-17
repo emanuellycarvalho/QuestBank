@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <td>${cursor.value.accuracy_average}</td>
                                 <td>${new Date(cursor.value.date).toLocaleDateString()}</td>
                                 <td>
-                                    <button class="btn btn-outline-primary btn-sm" onclick="editQuestion(${cursor.key})">Editar</button>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="viewQuestion(${cursor.key})">Editar</button>
+                                    <button class="btn btn-outline-success btn-sm" onclick="editQuestion(${cursor.key})">Ver</button>
                                     <button class="btn btn-danger btn-sm" onclick="deleteQuestion(${cursor.key})">Excluir</button>
                                 </td>
                             `;
