@@ -6,12 +6,54 @@
 * License: https://bootstrapmade.com/license/
 */
 
+// CUSTOM
 var script = document.createElement('script');
 script.src = '../assets/database/database.js';
 document.head.appendChild(script);
 script.onload = function() {
   openDatabase();
 };
+
+function showItems(array){
+  var size = array.length;
+  if(size < 1) return;
+
+  for(var i = 0 ; i < size; i++){
+    array[i].style.display = "block";
+  }
+}
+
+function hideItems(array){
+  var size = array.length;
+  if(size < 1) return;
+
+  for(var i = 0 ; i < size; i++){
+    array[i].style.display = "none";
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var isLoggedIn = localStorage.getItem('isLoggedIn');
+  var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+  var notLoggedUserElements = document.getElementsByClassName('unloggedUser');
+  var teacherElements = document.getElementsByClassName('teachersOnly');
+
+  if (isLoggedIn === 'true' && currentUser) {
+      console.log('Usuário logado:', currentUser.name);
+      hideItems(notLoggedUserElements);
+      if(currentUser.type == 1){
+        showItems(teacherElements);
+      } else {
+        hideItems(teacherElements);
+      }
+  } else {
+      showItems(notLoggedUserElements);
+  }
+});
+
+
+// DEFAULT
 
 (function() {
   "use strict";
