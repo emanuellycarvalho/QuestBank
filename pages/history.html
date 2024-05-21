@@ -108,6 +108,41 @@
   </main>
   <!-- End #main -->
 
+  <!-- ======= Modal ======= -->
+  <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Detalhes da Questão</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row justify-content-between">
+            <div class="col-7">
+              <div id="accuracySection"></div>              
+            </div>
+            <div class="col"></div>
+            <div class="col-2">
+              <div id="privacySection"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div><hr></div>
+            <div id="questionSection" class="h3"></div>
+            <div><hr></div>
+          </div>
+          <div class="row">
+            <div id="userSection"></div>
+          </div>
+        </div>
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <!-- End Modal -->
+
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
     <div class="footer-top">
@@ -176,6 +211,7 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="../assets/js/history.js"></script>
 
 </body>
