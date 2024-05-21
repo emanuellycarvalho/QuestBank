@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Histórico de Questões</title>
+  <title>Novo Uso</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -64,12 +64,13 @@
   <section class="breadcrumbs">
     <div class="container">
 
-      <ol>
+        <ol>
         <li><a href="../index.html">Home</a></li>
         <li>Questões</li>
-        <li>Histórico de Questões</li>
+        <li><a href="./history.html">Histórico de Questões</a></li>
+        <li>Novo Uso</li>
       </ol>
-      <h2>Histórico de Questões</h2>
+      <h2>Novo Uso</h2>
 
     </div>
   </section>
@@ -79,87 +80,42 @@
   <main id="main">
 
     <section class="inner-page vh-100">
-        <div class="container-xl">
-          <div class="row justify-content-end">
-            <div class="col-2">
-              <a href="#" class="btn btn-primary">Novo registro</a>
-            </div>
-          </div>
-          <div class="row">
-            <div class="table-responsive">
-              <div class="table-wrapper">
-                  <div class="table-title">
-                      <div class="row">
-                          <div class="col-sm-8 col-11"><h2>Histórico de <b>Questões</b></h2></div>
-                      </div>
-                  </div>
-                  <table class="table table-striped table-hover table-bordered">
-                      <thead>
-                          <tr>
-                              <th>Questão</th>
-                              <th>Tema</th>
-                              <th>Ações</th>
-                          </tr>
-                      </thead>
-                      <tbody id="historyTableBody"></tbody>
-                  </table>
+      <div class="container-fluid row">
+        <div class="d-flex justify-content-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
+          <form id="questionForm" style="width: 23rem;">
+              <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Novo Uso</h3>
+              <div class="form-outline mb-4">
+                <input id="id" class="form-control form-control-lg" hidden></input>
+
+                <input id="content" class="form-control form-control-lg" disabled></input>
+                <label class="form-label" for="content">Enunciado</label>
               </div>
-            </div>
-          </div>  
-        </div> 
+              <div class="form-outline mb-4">
+                <select id="theme" class="form-select form-select-lg" disabled></select>
+                <label class="form-label" for="theme">Tema</label>
+              </div>
+              <div class="form-outline mb-4">
+                <input id="class" class="form-control form-control-lg"></input>
+                <label class="form-label" for="class">Turma</label>
+              </div>
+              <div class="form-outline mb-4">
+                <input id="average" class="form-control form-control-lg" type="number"></input>
+                <label class="form-label" for="average">Porcentagem de acertos</label>
+              </div>
+
+              <p id="errorSection" style="color: #ed3c0d"></p>
+              <p id="successSection" style="color: #198754"></p>
+
+              <div class="mb-4">
+                <button class="btn btn-primary btn-lg btn-block" onClick="addHistory()" type="button">Salvar</button>
+              </div>
+          </form>
+        </div>
+      </div>
     </section>
 
   </main>
   <!-- End #main -->
-
-  <!-- ======= Modal ======= -->
-  <div class="modal fade modal-lg" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Detalhes da Questão</h5>
-        </div>
-        <div class="modal-body">
-          <div class="row justify-content-between">
-            <div class="col-7">
-              <div id="themeSection"></div>              
-            </div>
-            <div class="col"></div>
-            <div class="col-2">
-              <div id="privacySection"></div>
-            </div>
-          </div>
-          <div class="row">
-            <div><hr></div>
-            <div id="questionSection" class="h3"></div>
-            <div><hr></div>
-          </div>
-          <div class="row">
-            <div id="userSection"></div>
-            <div><hr></div>
-          </div>
-
-          <div class="row">
-            <div class="table-responsive">
-              <div class="table-wrapper">
-                  <table class="table table-striped table-hover table-bordered">
-                      <thead>
-                          <tr>
-                              <th>Turma</th>
-                              <th>Média</th>
-                              <th>Data</th>
-                          </tr>
-                      </thead>
-                      <tbody id="modalTableBody"></tbody>
-                  </table>
-              </div>
-            </div>
-          </div>  
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- End Modal -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
@@ -229,9 +185,28 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="../assets/js/custom.js"></script>
+  <script src="../assets/js/questions.js"></script>
   <script src="../assets/js/history.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        
+        if(id) {
+            const question = await getById('questions', parseInt(id));
+            
+            var idInput = document.getElementById('id');
+            idInput.value = question.id;
+            
+            var questionInput = document.getElementById('content');
+            questionInput.value = question.question;
+            
+            var themeInput = document.getElementById('theme');
+            themeInput.value = question.theme_id;
+        }
+    });
+</script>
 
 </body>
 

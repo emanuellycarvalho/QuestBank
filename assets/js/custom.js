@@ -1,3 +1,32 @@
+function getById(storeName, id) {
+    return new Promise((resolve, reject) => {
+        var request = indexedDB.open('questBank', 1);
+
+        request.onsuccess = function(event) {
+            var db = event.target.result;
+            var transaction = db.transaction([storeName], 'readonly');
+            var storeStore = transaction.objectStore(storeName);
+            var itemRequest = storeStore.get(id);
+
+            itemRequest.onsuccess = function(event) {
+                if (itemRequest.result) {
+                    resolve(itemRequest.result);
+                } else {
+                    reject('Item não encontrado');
+                }
+            };
+
+            itemRequest.onerror = function(event) {
+                reject('Erro ao buscar item');
+            };
+        };
+
+        request.onerror = function(event) {
+            reject('Erro ao abrir o banco de dados');
+        };
+    });
+}
+
 async function deleteById(storeName, id) {
     return new Promise((resolve, reject) => {
         var request = indexedDB.open('questBank', 1);

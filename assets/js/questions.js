@@ -44,26 +44,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
     fetchThemes();
 
-    document.getElementById('newQuestion').addEventListener('click', function() {
-        var content = contentInput.value.trim();
-        var theme = themeSelect.value.trim();
-        var isPublic = isPublicCheckbox.checked;
-
-        if (content === '' || theme === '' || content === null || theme === null) {
-            errorSection.textContent = 'Por favor, preencha todos os campos.';
-            successSection.textContent = '';
-            return;
-        }
-
-        var transaction = db.transaction(['questions'], 'readwrite');
-        var questionsStore = transaction.objectStore('questions');
-        var newQuestion = { question: content, isPublic: isPublic, theme_id: theme, user_id: currentUser.id};
-        var addQuestionRequest = questionsStore.add(newQuestion);
-
-        contentInput.value = '';
-        themeSelect.value = '';
-        isPublicCheckbox.checked = true;
-        errorSection.textContent = '';
-        successSection.textContent = 'Questão cadastrada com sucesso.';
-    });
+    const newQuestionBtn = document.getElementById('newQuestion');
+    
+    if(newQuestionBtn){
+        newQuestionBtn.addEventListener('click', function() {
+            var content = contentInput.value.trim();
+            var theme = themeSelect.value.trim();
+            var isPublic = isPublicCheckbox.checked;
+    
+            if (content === '' || theme === '' || content === null || theme === null) {
+                errorSection.textContent = 'Por favor, preencha todos os campos.';
+                successSection.textContent = '';
+                return;
+            }
+    
+            var transaction = db.transaction(['questions'], 'readwrite');
+            var questionsStore = transaction.objectStore('questions');
+            var newQuestion = { question: content, isPublic: isPublic, theme_id: theme, user_id: currentUser.id};
+            var addQuestionRequest = questionsStore.add(newQuestion);
+    
+            contentInput.value = '';
+            themeSelect.value = '';
+            isPublicCheckbox.checked = true;
+            errorSection.textContent = '';
+            successSection.textContent = 'Questão cadastrada com sucesso.';
+        });
+    }
+    
 });
