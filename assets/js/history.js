@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <td>${new Date(cursor.value.date).toLocaleDateString()}</td>
                                 <td>
                                     <button class="btn btn-outline-success btn-sm" onclick="viewCompleteHistory(${cursor.key})">Ver mais</button>
-                                    <button class="btn btn-danger btn-sm" onclick="deleteQuestion(${cursor.key})">Excluir</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteHistory(${cursor.key})">Excluir</button>
                                 </td>
                             `;
                             historyTableBody.appendChild(row);
@@ -119,12 +119,18 @@ async function viewCompleteHistory(item_id){
 
     privacySection.innerText = item.privacy ? 'Pública' : 'Privada';
     privacySection.style.color = item.privacy ? 'green' : 'red';
-    accuracySection.innerText = 'Precisão média de ' + item.average;
     themeSection.innerText = item.theme;
-    
+
     if(item.user) {
         userSection.innerText = 'Enviada por ' + item.user.name + ' (' + item.user.email + ') em ' + item.date;
     } 
     
     $('#historyModal').modal('toggle');
+}
+
+async function deleteHistory(item_id){
+    if(await deleteById('history', item_id)){
+        alert('Item removido com sucesso do histórico');
+        window.location.reload();
+    }
 }
