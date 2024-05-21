@@ -6,37 +6,47 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = '../index.html';
     }
 
-    async function populateHistoryTable() {
+    function populateHistoryTable() {
         var request = indexedDB.open('questBank', 1);
     
-        request.onsuccess = async function(event) {
+        request.onsuccess = function(event) {
             var db = event.target.result;
-            var transaction = db.transaction(['history'], 'readonly');
+            var transaction = db.transaction(['history', 'themes', 'questions'], 'readonly');
             var historyStore = transaction.objectStore('history');
+            var themesStore = transaction.objectStore('themes');
+            var questionsStore = transaction.objectStore('questions');
             var historyTableBody = document.getElementById('historyTableBody');
     
-            var historyTransacion = await historyStore.openCursor();
-            historyTransacion.onsuccess = async function(event) {
+            historyStore.openCursor().onsuccess = function(event) {
                 var cursor = event.target.result;
                 if (cursor) {
-                    var item = await getHistoryData(cursor.value.id);
-                    if (item !== null) {
-                        var row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${item.question}</td>
-                            <td>${item.theme}</td>
-                            <td>${item.class}</td>
-                            <td>${item.average}</td>
-                            <td>${item.date}</td>
-                            <td>
-                                <button class="btn btn-outline-success btn-sm" onclick="viewCompleteHistory(${item.id})">Ver mais</button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteQuestion(${item.id})">Excluir</button>
-                            </td>
-                        `;
-                        historyTableBody.appendChild(row);
-                    }
+                    console.log(cursor.value)
+                    var questionId = cursor.value.question_id;
+                    var questionRequest = questionsStore.get(questionId);
     
-                    await cursor.continue();
+                    questionRequest.onsuccess = function(event) {
+                        var questionTitle = event.target.result.question;
+
+                        var themeId = event.target.result.theme_id;
+                        var themeRequest = themesStore.get(themeId);
+
+                        themeRequest.onsuccess = function(event) {
+                            var themeName = event.target.result.name;
+                            var row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${questionTitle}</td>
+                                <td>${cursor.value.accuracy_average}%</td>
+                                <td>${new Date(cursor.value.date).toLocaleDateString()}</td>
+                                <td>
+                                    <button class="btn btn-outline-success btn-sm" onclick="viewCompleteHistory(${cursor.key})">Ver mais</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteQuestion(${cursor.key})">Excluir</button>
+                                </td>
+                            `;
+                            historyTableBody.appendChild(row);
+                        };
+                    };
+    
+                    cursor.continue();
                 }
             };
         };
@@ -47,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     populateHistoryTable();
-    
 });
 
 async function getHistoryData(history_id) {
@@ -96,23 +105,23 @@ async function getHistoryData(history_id) {
     });
 }
 
-
 async function viewCompleteHistory(item_id){
     const item = await  getHistoryData(item_id);
     console.log(item);
 
     var questionSection = document.getElementById('questionSection');
     var privacySection = document.getElementById('privacySection');
-    var dateSection = document.getElementById('dateSection');
     var accuracySection = document.getElementById('accuracySection');
     var userSection = document.getElementById('userSection');
+    var themeSection = document.getElementById('themeSection');
 
     questionSection.innerText = item.question;
 
     privacySection.innerText = item.privacy ? 'Pública' : 'Privada';
     privacySection.style.color = item.privacy ? 'green' : 'red';
-    
     accuracySection.innerText = 'Precisão média de ' + item.average;
+    themeSection.innerText = item.theme;
+    
     if(item.user) {
         userSection.innerText = 'Enviada por ' + item.user.name + ' (' + item.user.email + ') em ' + item.date;
     } 
