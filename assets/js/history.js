@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var isLoggedIn = localStorage.getItem('isLoggedIn');
     currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
-    if (!isLoggedIn === 'true' || !currentUser || currentUser === undefined || currentUser.type !== 1) {
+    if (!isLoggedIn === 'true' || !currentUser || currentUser === undefined) {
         window.location.href = '../index.html';
     }
 
@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                     </td>
                                 `;
                                 historyTableBody.appendChild(row);
+
+                                updateItemStatus();
                             };
     
                             themeRequest.onerror = function(event) {
@@ -65,6 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
             historyStore.openCursor().onerror = function(event) {
                 console.error('Erro ao abrir o cursor', event.target.errorCode);
             };
+            
+
         };
     
         request.onerror = function(event) {
@@ -72,8 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    populateHistoryTable();
-    
+    populateHistoryTable();    
 });
 
 async function getHistoryData(history_id) {

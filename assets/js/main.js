@@ -32,7 +32,7 @@ function hideItems(array){
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+function updateItemStatus() {
   var isLoggedIn = localStorage.getItem('isLoggedIn');
   var currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -55,7 +55,9 @@ document.addEventListener('DOMContentLoaded', function() {
     hideItems(teacherElements);
     console.log('Nenhum suário logado');
   }
-});
+}
+
+updateItemStatus();
 
 function logout(){
   localStorage.setItem('isLoggedIn', false);
