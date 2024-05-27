@@ -41,9 +41,17 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <td>${questionTitle}</td>
                                     <td>${themeName}</td>
                                     <td>
-                                        <button class="btn btn-outline-success btn-sm" onclick="viewCompleteHistory(${cursor.key})">Ver histórico</button>
-                                        <button class="teachersOnly btn btn-danger btn-sm" onclick="deleteHistory(${cursor.key})">Excluir</button>
-                                        <button class="teachersOnly btn btn-primary btn-sm" onclick="newHistory(${cursor.key})">Novo uso</button>
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <button class="btn btn-outline-success btn-sm" onclick="viewCompleteHistory(${cursor.key})">Ver histórico</button>
+                                            </div>
+                                            <div class="col-auto">
+                                                <button class="teachersOnly btn btn-danger btn-sm" onclick="deleteHistory(${cursor.key})">Excluir</button>
+                                            </div>
+                                            <div class="col-auto">
+                                                <button class="teachersOnly btn btn-primary btn-sm" onclick="newHistory(${cursor.key})">Novo uso</button>
+                                            </div>
+                                        </div>
                                     </td>
                                 `;
                                 historyTableBody.appendChild(row);
@@ -178,21 +186,78 @@ async function viewCompleteHistory(item_id) {
     }
 
     var historyItems = await getHistoryByQuestionId(item.question_id);
-
+    historyItems.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
     var modalTableBody = document.getElementById('modalTableBody');
     modalTableBody.innerHTML = '';
 
-    historyItems.forEach(historyItem => {
+    var maxRows = 2;
+    var totalRows = historyItems.length;
+
+    for (let i = 0; i < Math.min(maxRows, totalRows); i++) {
         var row = document.createElement('tr');
         row.innerHTML = `
-            <td>${historyItem.class}</td>
-            <td>${historyItem.accuracy_average}%</td>
-            <td>${new Date(historyItem.date).toLocaleDateString()}</td>
+            <td>${historyItems[i].class}</td>
+            <td>${historyItems[i].accuracy_average}%</td>
+            <td>${new Date(historyItems[i].date).toLocaleDateString()}</td>
         `;
         modalTableBody.appendChild(row);
-    });
+    }
+
+    if (totalRows > maxRows) {
+        var remainingRows = totalRows - maxRows;
+        var remainingRow = document.createElement('tr');
+        remainingRow.innerHTML = `
+            <td colspan="3">Mais ${remainingRows} registros</td>
+        `;
+        modalTableBody.appendChild(remainingRow);
+    }
+
+
+    var modalFooterButtons = document.getElementById('modalFooterButtons');
+    const frequencyReportBtn = `<button class="teachersOnly btn btn-outline-primary btn-sm" onclick="frequencyReport(${item_id})">Relatório de frequência</button>`;
+    modalFooterButtons.innerHTML = frequencyReportBtn;
 
     $('#historyModal').modal('toggle');
+}
+
+async function frequencyReport(item_id) {
+    const item = await getHistoryData(item_id);
+    const historyItems = await getHistoryByQuestionId(item.question_id);
+    const data = historyItems.map(item => ({
+        "Turma": item.class,
+        "Porcentagem de acertos": item.accuracy_average + "%",
+        "Data de Uso": new Date(item.date).toLocaleDateString()
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data, { header: ["Turma", "Porcentagem de acertos", "Data de Uso"] });
+
+    const headers = ["Turma", "Porcentagem de acertos", "Data de Uso"];
+    XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: "A1" });
+
+    const wscols = [
+        { wch: Math.max(...data.map(row => row["Turma"].length), "Turma".length) },
+        { wch: Math.max(...data.map(row => row["Porcentagem de acertos"].length), "Porcentagem de acertos".length) },
+        { wch: Math.max(...data.map(row => row["Data de Uso"].length), "Data de Uso".length) }
+    ];
+    worksheet['!cols'] = wscols;
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Relatório de Frequência');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `relatorio_frequencia_${item_id}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
 async function deleteHistory(item_id){
