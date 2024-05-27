@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Histórico de Questões</title>
+  <title>Questões</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -50,8 +50,10 @@
         <nav id="navbar" class="navbar">
         <ul>
             <li><a class="nav-link scrollto active" href="../index.html">Home</a></li>
-            <li><a href="./questions.html">Questões</a></li>
-            <li class="teachersOnly"><a href="./history.html">Históricos</a></li>
+            <li class="unloggedUser"><a class="nav-link scrollto active" href="./register-and-login.html">Login</a></li>
+            <li class="loggedUsers"><a href="./questions.html">Questões</a></li>
+            <li class="teachersOnly"><a href="./reports.html">Relatórios</a></li>
+            <li class="loggedUsers"><a href="#" onclick="logout()">Logout</a></li>
           </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
@@ -67,9 +69,8 @@
       <ol>
         <li><a href="../index.html">Home</a></li>
         <li>Questões</li>
-        <li>Histórico de Questões</li>
       </ol>
-      <h2>Histórico de Questões</h2>
+      <h2>Questões</h2>
 
     </div>
   </section>
@@ -80,17 +81,12 @@
 
     <section class="inner-page vh-100">
         <div class="container-xl">
-          <div class="row justify-content-end">
-            <div class="col-2">
-              <a href="#" class="btn btn-primary">Novo registro</a>
-            </div>
-          </div>
           <div class="row">
             <div class="table-responsive">
               <div class="table-wrapper">
                   <div class="table-title">
                       <div class="row">
-                          <div class="col-sm-8 col-11"><h2>Histórico de <b>Questões</b></h2></div>
+                        <div class="col-sm-8 col-11"><h2>Histórico de <b>Questões</b></h2></div>
                       </div>
                   </div>
                   <table class="table table-striped table-hover table-bordered">
