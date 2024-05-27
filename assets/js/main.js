@@ -37,20 +37,31 @@ document.addEventListener('DOMContentLoaded', function() {
   var currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
   var notLoggedUserElements = document.getElementsByClassName('unloggedUser');
+  var loggedUserElements = document.getElementsByClassName('loggedUsers');
   var teacherElements = document.getElementsByClassName('teachersOnly');
 
-  if (isLoggedIn === 'true' && currentUser) {
-      console.log('Usuário logado:', currentUser.name);
-      hideItems(notLoggedUserElements);
-      if(currentUser.type == 1){
-        showItems(teacherElements);
-      } else {
-        hideItems(teacherElements);
-      }
+  if(isLoggedIn && currentUser) {
+    console.log('Usuário logado:', currentUser.name);
+    hideItems(notLoggedUserElements);
+    showItems(loggedUserElements);
+    if(currentUser.type == 1){
+      showItems(teacherElements);
+    } else {
+      hideItems(teacherElements);
+    }
   } else {
-      showItems(notLoggedUserElements);
+    showItems(notLoggedUserElements);
+    hideItems(loggedUserElements);
+    hideItems(teacherElements);
+    console.log('Nenhum suário logado');
   }
 });
+
+function logout(){
+  localStorage.setItem('isLoggedIn', false);
+  localStorage.removeItem('currentUser');
+  window.location.reload(true);
+}
 
 
 // DEFAULT

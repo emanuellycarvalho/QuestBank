@@ -40,6 +40,6 @@ function handleLogin(){
 function success(message, user){
     console.log(message);
     window.location.href = '../index.html';
-    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('isLoggedIn', true);
     localStorage.setItem('currentUser', JSON.stringify(user));
 }
