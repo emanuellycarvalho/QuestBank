@@ -18,36 +18,52 @@ document.addEventListener('DOMContentLoaded', function() {
             var questionsStore = transaction.objectStore('questions');
             var historyTableBody = document.getElementById('historyTableBody');
     
+            var processedQuestions = new Set();
+    
             historyStore.openCursor().onsuccess = function(event) {
                 var cursor = event.target.result;
                 if (cursor) {
                     var questionId = cursor.value.question_id;
-                    var questionRequest = questionsStore.get(questionId);
     
-                    questionRequest.onsuccess = function(event) {
-                        var questionTitle = event.target.result.question;
-
-                        var themeId = event.target.result.theme_id;
-                        var themeRequest = themesStore.get(themeId);
-
-                        themeRequest.onsuccess = function(event) {
-                            var themeName = event.target.result.name;
-                            var row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${questionTitle}</td>
-                                <td>${themeName}</td>
-                                <td>
-                                    <button class="btn btn-outline-success btn-sm" onclick="viewCompleteHistory(${cursor.key})">Ver mais</button>
-                                    <button class="btn btn-danger btn-sm" onclick="deleteHistory(${cursor.key})">Excluir</button>
-                                    <button class="btn btn-primary btn-sm" onclick="newHistory(${cursor.key})">Novo uso</button>
-                                </td>
-                            `;
-                            historyTableBody.appendChild(row);
+                    if (!processedQuestions.has(questionId)) {
+                        processedQuestions.add(questionId);
+                        var questionRequest = questionsStore.get(questionId);
+    
+                        questionRequest.onsuccess = function(event) {
+                            var questionTitle = event.target.result.question;
+                            var themeId = event.target.result.theme_id;
+                            var themeRequest = themesStore.get(themeId);
+    
+                            themeRequest.onsuccess = function(event) {
+                                var themeName = event.target.result.name;
+                                var row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${questionTitle}</td>
+                                    <td>${themeName}</td>
+                                    <td>
+                                        <button class="btn btn-outline-success btn-sm" onclick="viewCompleteHistory(${cursor.key})">Ver histórico</button>
+                                        <button class="teachersOnly btn btn-danger btn-sm" onclick="deleteHistory(${cursor.key})">Excluir</button>
+                                        <button class="teachersOnly btn btn-primary btn-sm" onclick="newHistory(${cursor.key})">Novo uso</button>
+                                    </td>
+                                `;
+                                historyTableBody.appendChild(row);
+                            };
+    
+                            themeRequest.onerror = function(event) {
+                                console.error('Erro ao buscar o tema', event.target.errorCode);
+                            };
                         };
-                    };
     
+                        questionRequest.onerror = function(event) {
+                            console.error('Erro ao buscar a questão', event.target.errorCode);
+                        };
+                    }
                     cursor.continue();
                 }
+            };
+    
+            historyStore.openCursor().onerror = function(event) {
+                console.error('Erro ao abrir o cursor', event.target.errorCode);
             };
         };
     
@@ -57,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     populateHistoryTable();
+    
 });
 
 async function getHistoryData(history_id) {
@@ -183,7 +200,7 @@ async function deleteHistory(item_id){
 }
 
 function newHistory(item_id) {
-    window.location.href = `new-history.html?id=${item_id}`;
+    window.location.href = `new-questions.html?id=${item_id}`;
 }
 
 async function addHistory() {
