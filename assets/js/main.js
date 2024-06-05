@@ -53,7 +53,7 @@ function updateItemStatus() {
     showItems(notLoggedUserElements);
     hideItems(loggedUserElements);
     hideItems(teacherElements);
-    console.log('Nenhum suário logado');
+    console.log('Nenhum usuário logado');
   }
 }
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testes do Projeto</title>
+    <style>
+        .pagina-testes {
+          width: 60%;
+          display: block;
+          margin: auto;
+          margin-top: 50px;
+        }
+        .test-result {
+            padding: 30px 20px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .test-result.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .test-result.failure {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+    <body>
+      <div class="pagina-testes">
+        <h1>Resultados dos Testes - Questbank</h1>
+        <div id="results"></div>
+      </div>
+      <script src="../assets/database/database.js"></script>
+      <script src="tests.js"></script>
+    </body>
+</head>
+
+</html>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Questões</title>
+  <title>QuestBank - Questões</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -49,9 +49,10 @@
 
         <nav id="navbar" class="navbar">
         <ul>
-            <li><a class="nav-link scrollto active" href="../index.html">Home</a></li>
-            <li class="unloggedUser"><a class="nav-link scrollto active" href="./register-and-login.html">Login</a></li>
-            <li class="loggedUsers"><a href="./questions.html">Questões</a></li>
+            <li><a class="nav-link scrollto" href="../index.html">Home</a></li>
+            <li class="unloggedUser"><a class="nav-link scrollto" href="./register-and-login.html">Login</a></li>
+            <li class="loggedUsers"><a href="./themes.html">Temas</a></li>
+            <li class="loggedUsers active"><a class="active" href="./questions.html">Questões</a></li>
             
             <li class="loggedUsers"><a href="#" onclick="logout()">Logout</a></li>
           </ul>
@@ -70,7 +71,17 @@
         <li><a href="../index.html">Home</a></li>
         <li>Questões</li>
       </ol>
-      <h2>Questões</h2>
+      <div class="row">
+        <div class="col-sm-5 col-11">
+            <h2><b>Questões</b></h2>
+        </div>
+        <div class="col-sm-7 col-1 text-right" id="barra-superior">
+          <button onclick="openModalNewQuestion()" class="btn btn-light float-right teachersOnly">Nova Questão</button>
+          <button id="exportNotesReport" class="btn btn-outline-light float-right teachersOnly">Relatório de Aproveitamento</button>            
+            <button id="exportExcel" class="btn btn-outline-light float-right">Relatório de Frequência</button><!-- Adicione este botão na seção adequada do HTML, por exemplo, perto do botão existente de exportação -->
+        </div>
+    </div>
+    
 
     </div>
   </section>
@@ -84,20 +95,7 @@
           <div class="row">
             <div class="table-responsive">
               <div class="table-wrapper">
-                  <div class="table-title">
-                      <div class="row">
-                        <div class="col-sm-8 col-11"><h2>Histórico de <b>Questões</b></h2></div>
-                      </div>
-                  </div>
-                  <table class="table table-striped table-hover table-bordered">
-                      <thead>
-                          <tr>
-                              <th>Questão</th>
-                              <th>Tema</th>
-                              <th>Ações</th>
-                          </tr>
-                      </thead>
-                      <tbody id="historyTableBody"></tbody>
+                  <table class="table table-striped table-hover table-bordered" id="questionsTable">
                   </table>
               </div>
             </div>
@@ -144,6 +142,7 @@
                               <th>Turma</th>
                               <th>Média</th>
                               <th>Data</th>
+                              <th>Observações</th>
                           </tr>
                       </thead>
                       <tbody id="modalTableBody"></tbody>
@@ -155,6 +154,76 @@
         <div class="modal-footer">
           <div class="row justify-content-end" id="modalFooterButtons">
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal -->
+
+  <!-- ======= Modal ======= -->
+  <div class="modal fade modal-lg" id="newQuestionModal" tabindex="-1" role="dialog" aria-labelledby="historyModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Nova Questão</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-outline mb-4">
+            <label class="form-label" for="content">Enunciado</label>
+            <textarea id="content" class="form-control form-control-lg"></textarea>
+          </div>
+          <div class="form-outline mb-4">
+            <label class="form-label" for="theme">Tema</label>
+            <select id="theme" class="form-select form-select-lg"></select>
+          </div>
+          <div class="form-check form-switch mb-4">
+            <input class="form-check-input" type="checkbox" id="isPublic" checked>
+            <label class="form-check-label" for="isPublic">Pública</label>
+          </div>
+
+          <p id="errorSection" style="color: #ed3c0d"></p>
+          <p id="successSection" style="color: #198754"></p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary btn-lg btn-block" id="newQuestion" type="button">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal -->
+
+  <!-- ======= Modal ======= -->
+  <div class="modal fade modal-lg" id="newUseQuestionModal" role="dialog" aria-labelledby="newUseQuestionModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Novo Uso da Questão</h5>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="question_use_question_id">
+          <input type="hidden" id="question_use_user_id">
+          <div class="form-outline mb-4">
+            <label class="form-label" for="content">Data</label>
+            <input class="form-control" type="date" id="question_use_date">
+          </div>
+          <div class="form-outline mb-4">
+            <label class="form-label" for="content">Turma</label>
+            <input class="form-control" type="text" id="question_use_class">
+          </div>
+          <div class="form-outline mb-4">
+            <label class="form-label" for="theme">Nota</label>
+            <input class="form-control" type="number" id="question_use_accuracy">
+          </div>
+          <div class="form-outline mb-4">
+            <label class="form-check-label" for="isPublic">Observações</label>
+            <textarea id="question_use_observations" class="form-control form-control-lg"></textarea>
+          </div>
+
+          <p id="newUseQuestionErrorSection" style="color: #ed3c0d"></p>
+          <p id="newUseQuestionSuccessSection" style="color: #198754"></p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary btn-lg btn-block" id="newUseQuestion" type="button">Salvar</button>
         </div>
       </div>
     </div>
@@ -232,6 +301,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="../assets/js/custom.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+  <script src="../assets/js/questions.js"></script>
   <script src="../assets/js/history.js"></script>
 
 </body>

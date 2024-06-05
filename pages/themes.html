@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Nova Questão</title>
+  <title>QuestBank - Temas</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -49,8 +49,9 @@
 
         <nav id="navbar" class="navbar">
         <ul>
-            <li><a class="nav-link scrollto active" href="../index.html">Home</a></li>
-            <li class="unloggedUser"><a class="nav-link scrollto active" href="./register-and-login.html">Login</a></li>
+            <li><a class="nav-link scrollto" href="../index.html">Home</a></li>
+            <li class="unloggedUser"><a class="nav-link scrollto" href="./register-and-login.html">Login</a></li>
+            <li class="loggedUsers"><a class="active" href="./themes.html">Temas</a></li>
             <li class="loggedUsers"><a href="./questions.html">Questões</a></li>
             
             <li class="loggedUsers"><a href="#" onclick="logout()">Logout</a></li>
@@ -68,10 +69,15 @@
 
       <ol>
         <li><a href="../index.html">Home</a></li>
-        <li>Questões</li>
-        <li>Nova Questão</li>
+        <li>Temas</li>
       </ol>
-      <h2>Nova Questão</h2>
+      <div class="row">
+        <div class="col-10">
+            <h2><b>Temas</b></h2>
+        </div>
+        <div class="col-2 text-right" id="barra-superior">
+          </div>
+    </div>
 
     </div>
   </section>
@@ -81,37 +87,84 @@
   <main id="main">
 
     <section class="inner-page vh-100">
-      <div class="container-fluid row">
-        <div class="d-flex justify-content-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
-          <form id="questionForm" style="width: 23rem;">
-              <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Nova Questão</h3>
-              <div class="form-outline mb-4">
-                <textarea id="content" class="form-control form-control-lg"></textarea>
-                <label class="form-label" for="content">Enunciado</label>
+        <div class="container-xl">
+          <div class="row">
+            <div class="table-responsive">
+              <div class="table-wrapper">
+                  <div class="table-title">
+                      <div class="row">
+                        <div class="col-sm-8 col-11"><h2><b>Tema</b></h2></div>
+                      </div>
+                  </div>
+                  <table class="table table-striped table-hover table-bordered">
+                      <thead>
+                          <tr id="header-tabela">
+                              <th>Tema</th>
+                          </tr>
+                      </thead>
+                      <tbody id="themesTableBody"></tbody>
+                  </table>
               </div>
-              <div class="form-outline mb-4">
-                <select id="theme" class="form-select form-select-lg"></select>
-                <label class="form-label" for="theme">Tema</label>
-              </div>
-              <div class="form-check form-switch mb-4">
-                <input class="form-check-input" type="checkbox" id="isPublic" checked>
-                <label class="form-check-label" for="isPublic">Pública</label>
-              </div>
-
-              <p id="errorSection" style="color: #ed3c0d"></p>
-              <p id="successSection" style="color: #198754"></p>
-
-              <div class="mb-4">
-                <a href="./new-theme.html" class="btn btn-outline-primary btn-lg btn-block">Novo tema</a>
-                <button class="btn btn-primary btn-lg btn-block" id="newQuestion" type="button">Salvar</button>
-              </div>
-          </form>
-        </div>
-      </div>
+            </div>
+          </div>  
+        </div> 
     </section>
 
   </main>
   <!-- End #main -->
+
+  <!-- ======= Modal ======= -->
+  <div class="modal fade modal-lg" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Detalhes da Questão</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row justify-content-between">
+            <div class="col-7">
+              <div id="themeSection"></div>              
+            </div>
+            <div class="col"></div>
+            <div class="col-2">
+              <div id="privacySection"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div><hr></div>
+            <div id="questionSection" class="h3"></div>
+            <div><hr></div>
+          </div>
+          <div class="row">
+            <div id="userSection"></div>
+            <div><hr></div>
+          </div>
+
+          <div class="row">
+            <div class="table-responsive">
+              <div class="table-wrapper">
+                  <table class="table table-striped table-hover table-bordered">
+                      <thead>
+                          <tr>
+                              <th>Turma</th>
+                              <th>Média</th>
+                              <th>Data</th>
+                          </tr>
+                      </thead>
+                      <tbody id="modalTableBody"></tbody>
+                  </table>
+              </div>
+            </div>
+          </div>  
+        </div>
+        <div class="modal-footer">
+          <div class="row justify-content-end" id="modalFooterButtons">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
@@ -119,8 +172,8 @@
       <div class="container">
         <div class="row gy-4">
           <div class="col-lg-5 col-md-12 footer-info">
-            <a href="index.html" class="logo d-flex align-items-center">
-              <img src="assets/img/logo.png" alt="">
+            <a href="../index.html" class="logo d-flex align-items-center">
+              <img src="../assets/img/logo.png" alt="">
               <span>QuestBank</span>
             </a>
             <p>
@@ -181,13 +234,11 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/questions.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var loginButton = document.querySelector('#loginBtn');
-        loginButton.addEventListener('click', handleLogin);
-    });
-  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="../assets/js/custom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+  <script src="../assets/js/history.js"></script>
+  <script src="../assets/js/themes.js"></script>
 
 </body>
 
