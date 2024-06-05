@@ -76,8 +76,9 @@
             <h2><b>Questões</b></h2>
         </div>
         <div class="col-sm-7 col-1 text-right" id="barra-superior">
-            <button id="exportExcel" class="btn btn-outline-light">Relatório de Frequência</button><!-- Adicione este botão na seção adequada do HTML, por exemplo, perto do botão existente de exportação -->
-            <button id="exportNotesReport" class="btn btn-outline-light">Relatório de Aproveitamento</button>            
+          <button onclick="openModalNewQuestion()" class="btn btn-light float-right teachersOnly">Nova Questão</button>
+          <button id="exportNotesReport" class="btn btn-outline-light float-right teachersOnly">Relatório de Aproveitamento</button>            
+            <button id="exportExcel" class="btn btn-outline-light float-right">Relatório de Frequência</button><!-- Adicione este botão na seção adequada do HTML, por exemplo, perto do botão existente de exportação -->
         </div>
     </div>
     

@@ -310,8 +310,6 @@ $(document).ready(() => {
                     visibility: visibility,
                     user_id: currentUser.id // Supondo que o ID do usuário seja 1, altere conforme necessário
                 };
-
-                console.log(newQuestion);
     
                 const request = questionsStore.add(newQuestion);
     
@@ -403,13 +401,7 @@ $(document).ready(() => {
     
     loadQuestions();
     initializeNewQuestionModal();
-    initializeNewUseQuestionModal();
-
-    if(currentUser.type==1){
-        const barra_superior = $('#barra-superior');
-        barra_superior.append(`<button onclick="openModalNewQuestion()" class="btn btn-light">Nova Questão</button>`);
-    }
-        
+    initializeNewUseQuestionModal();        
 
 });
 
