@@ -1,4 +1,7 @@
-$(document).ready(() => {
+
+
+var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
     class Theme {
       constructor(id, name) {
         this.id = id;
@@ -162,9 +165,51 @@ $(document).ready(() => {
     if(currentUser.type==1){
         const header_tabela = $('#header-tabela');
         header_tabela.append(`<th>Ações</th>`);
-
-      const barra_superior = $('#barra-superior');
-      barra_superior.append(`<button class="btn btn-light">Novo Tema</button>`);
   }
-  });
+
   
+async function openModalNewTheme() {
+  $('#newThemeModal').modal('toggle');
+}
+
+
+$('#newTheme').on('click', () => {
+  const themeName = $('#name').val();
+
+  if (themeName.trim() === '') {
+      $('#errorSection').text('O nome não pode estar vazio.');
+      return;
+  }
+
+  const dbOpenRequest = indexedDB.open('questBank', 1);
+
+  dbOpenRequest.onsuccess = (event) => {
+      const db = event.target.result;
+      const transaction = db.transaction(['themes'], 'readwrite');
+      const themesStore = transaction.objectStore('themes');
+
+      const newQuestion = {
+          name: themeName,
+      };
+
+      const request = themesStore.add(newQuestion);
+
+      request.onsuccess = () => {
+          document.getElementById('name').value = '';
+          $('#successSection').text('Novo tema salvo com sucesso.');
+          $('#errorSection').text('');
+          $('#newThemeModal').modal('hide');
+          loadThemes();
+      };
+
+      request.onerror = (event) => {
+          console.error('Erro ao salvar novo tema', event.target  );
+          $('#errorSection').text('Erro ao salvar novo tema.');
+          $('#successSection').text('');
+      };
+  };
+
+  dbOpenRequest.onerror = (event) => {
+      console.error('Erro ao abrir o banco de dados', event.target.errorCode);
+  };
+});
